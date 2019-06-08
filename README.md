@@ -7,5 +7,5 @@ The internship is "Development of a method of synthesis of robots with tensegrit
 There is a google doc who contain a lot of data related to the project: [Link](https://docs.google.com/document/d/19-lCDq4gPtaQ6hCJNI77qi1bIzHJGaliu4Yrh53H7hs/edit?usp=sharing)
 
 
-## Setup's steps:
+## How to start?:
 
