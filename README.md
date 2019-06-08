@@ -26,7 +26,6 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 	If the setup.sh has failed, try first to run it again. (It worked for me)
 
 4. Test the environment
-
 	 a. Run build.sh
     ```bash
     ./bin/build.sh
@@ -36,4 +35,8 @@ There is a google doc who contain a lot of data related to the project: [Link](h
      ./build/examples/3_prism/AppPrismModel
 	```
 	The simulator should be appeared now.
-		 
+5. Go to the main branch of my project
+	```bash
+		git checkout mainDev
+	```
+6.
