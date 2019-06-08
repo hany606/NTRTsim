@@ -1,3 +1,4 @@
+
 # Tensegrity-Robot-IU-Internship19
 This repo is for Innopolis University Summer 2019 internship. The purpose of the repo is to collect all the technical data from the internship.
 
@@ -8,4 +9,30 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 
 
 ## How to start?:
+  1. Clone the repo:
+	  ```bash
+	  git clone git@github.com:hany606/Tensegrity-Robot-IU-Internship19.git
+	  ```
+  2. Go to the folder:
+	 ```bash
+	    cd Tensegrity-Robot-IU-Internship.git
+	    ```
+	  
+ 3. Running the setup.sh
+	 ```bash
+	 ./setup.sh
+	 ```
+	If you have any problems or issues check the original documentation of installing the simulator: [Link]([https://raw.githubusercontent.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/master/INSTALL](https://raw.githubusercontent.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/master/INSTALL)).
+	If the setup.sh has failed, try first to run it again. (It worked for me)
 
+4. Test the environment
+	 a. Run build.sh
+    ```bash
+    ./bin/build.sh
+	```
+	b. Run an Example
+	```bash
+     ./build/examples/3_prism/AppPrismModel
+	```
+	The simulator should be appeared now.
+		 
