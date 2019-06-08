@@ -22,7 +22,8 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 	 ```bash
 	 ./setup.sh
 	 ```
-	If you have any problems or issues check the original documentation of installing the simulator: [Link]([https://raw.githubusercontent.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/master/INSTALL](https://raw.githubusercontent.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/master/INSTALL)).
+	If you have any problems or issues check the original documentation of installing the simulator: [Link](https://raw.githubusercontent.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/master/INSTALL).
+	
 	If the setup.sh has failed, try first to run it again. (It worked for me)
 
 4. Test the environment
