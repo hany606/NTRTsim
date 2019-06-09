@@ -6,7 +6,7 @@ conf/*.conf
 src/DoxyDocs
 
 .cproject
-
+.vscode
 .project
 
 .idea
