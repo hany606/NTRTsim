@@ -40,4 +40,10 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 	```bash
 		git checkout mainDev
 	```
-6.
+6.To Open any stimulation for a structure, you should build the codes then run it from build directory
+	```bash
+    ./bin/build.sh
+    cd build/dev
+    cd Model_name
+    ./App_Name_Model
+	```
