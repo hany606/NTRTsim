@@ -1,4 +1,5 @@
 
+
 # Tensegrity-Robot-IU-Internship19
 This repo is for Innopolis University Summer 2019 internship. The purpose of the repo is to collect all the technical data from the internship.
 
@@ -15,7 +16,7 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 	  ```
   2. Go to the folder:
 	 ```bash
-	    cd Tensegrity-Robot-IU-Internship.git
+	 cd Tensegrity-Robot-IU-Internship.git
 	    ```
 	  
  3. Running the setup.sh
@@ -33,17 +34,17 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 	```
 	b. Run an Example
 	```bash
-     ./build/examples/3_prism/AppPrismModel
+	./build/examples/3_prism/AppPrismModel
 	```
 	The simulator should be appeared now.
 5. Go to the main branch of my project
 	```bash
-		git checkout mainDev
+	git checkout mainDev
 	```
-6.To Open any stimulation for a structure, you should build the codes then run it from build directory
+6. To Open any stimulation for a structure, you should build the codes then run it from build directory
 	```bash
-    ./bin/build.sh
-    cd build/dev
-    cd Model_name
-    ./App_Name_Model
+	./bin/build.sh
+	cd build/dev
+	cd Model_name
+	./App_Name_Model
 	```
