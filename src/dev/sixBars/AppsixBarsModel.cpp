@@ -7,6 +7,8 @@
 
 // This application
 #include "sixBarsModel.h"
+// The controller
+#include "LengthController.h"
 // This library
 #include "core/terrain/tgBoxGround.h"
 #include "core/tgModel.h"
@@ -50,9 +52,15 @@ int main(int argc, char** argv)
     // Fourth create the models with their controllers and add the models to the
     // simulation
     sixBarsModel* const myModel = new sixBarsModel();
+
+    // Create the controller
+    LengthController* const myController = new LengthController();
+    
+    // Attach controller to the model
+    myModel->attach(myController);
+
     
     // Add the model to the world * $Id$
-
     simulation.addModel(myModel);
     
     simulation.run();

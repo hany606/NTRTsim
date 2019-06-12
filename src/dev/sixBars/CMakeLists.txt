@@ -10,5 +10,6 @@ link_libraries(tgcreator
 add_executable(AppsixBarsModel
     sixBarsModel.cpp
     AppsixBarsModel.cpp
+    LengthController.cpp
 ) 
 

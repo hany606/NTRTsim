@@ -26,7 +26,7 @@
  * $Id$
  */
 
-#include "threeBarModel.h"
+#include "sixBarsModel.h"
 
 // This library
 #include "core/tgObserver.h"
@@ -37,9 +37,9 @@
 #include <vector>
 
 // Forward declarations
-class threeBarModel;
+class sixBarsModel;
 
-class LengthController : public tgObserver<threeBarModel>
+class LengthController : public tgObserver<sixBarsModel>
 {
 public:
 	
@@ -55,7 +55,7 @@ public:
      */
     virtual ~LengthController();
     
-    virtual void onSetup(threeBarModel& subject);
+    virtual void onSetup(sixBarsModel& subject);
     
     /**
      * Apply the length controller. Called by notifyStep(dt) of its
@@ -64,7 +64,7 @@ public:
      * have a list of allMuscles populated
      * @param[in] dt, current timestep must be positive
      */
-    virtual void onStep(threeBarModel& subject, double dt);
+    virtual void onStep(sixBarsModel& subject, double dt);
 
     std::vector<tgBasicController*> m_controllers; //instantiate vector of controllers
     std::vector<double> rand_lengths; //instantiate vector of random restlengths

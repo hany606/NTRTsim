@@ -8,7 +8,7 @@
 #include "sixBarsModel.h"
 // This library
 #include "core/tgBasicActuator.h"
-#include "core/tgRod.h"
+#include "core/tgString.h"
 #include "tgcreator/tgBuildSpec.h"
 #include "tgcreator/tgBasicActuatorInfo.h"
 #include "tgcreator/tgRodInfo.h"
@@ -38,14 +38,20 @@ namespace
         double damping;
         double pretension;
         double length;
+        bool hist;
+        double maxTension;
+        double targetVelocity;
     } c =
    {
        0.2,     // density (mass / length^3)
        0.31,     // radius (length)
        1000.0,   // stiffness (mass / sec^2)
        10.0,     // damping (mass / sec)
-       5000.0,     // pretension (mass * length / sec^2)
-       10.0
+       500.0,     // pretension (mass * length / sec^2)
+       10.0,        //length of bar
+       0,           // history logging (boolean)
+       10000,       // max tension
+       1,         // target actuator velocity
   };
 } // namespace
 
@@ -82,44 +88,21 @@ void sixBarsModel::addNodes(tgStructure& s, double length)
     //Bar 3D
     s.addNode(0,2*length,0.5*length);
     s.addNode(0,0,0.5*length);
-    
-    //Best framework configuration
-    // //Bar 1 Vertical
-    // s.addNode(-length,length,-length);
-    // s.addNode(-length,length,length);
-    // //Bar 2 Vertical
-    // s.addNode(length,length,-length);
-    // s.addNode(length,length,length);
-
-    // // Bar 3 Horizontal
-    // s.addNode(-length,1.5*length,0);
-    // s.addNode(length,1.5*length,0);
-    // //Bar 3 Horizontal
-    // s.addNode(-length,0.5*length,0);
-    // s.addNode(length,0.5*length,0);
-
-
-    // //Bar 3D
-    // s.addNode(0,2*length,-0.5*length);
-    // s.addNode(0,0,-0.5*length);
-    // //Bar 3D
-    // s.addNode(0,2*length,0.5*length);
-    // s.addNode(0,0,0.5*length);
 
 }
 
 void sixBarsModel::addRods(tgStructure& s)
 {
-    s.addPair( 0,  1, "rod");
-    s.addPair( 2,  3, "rod");
-    s.addPair( 4,  5, "rod");
-    s.addPair( 6,  7, "rod");
-    s.addPair( 8,  9, "rod");
-    s.addPair( 10,  11, "rod");
+    s.addPair( 0,  1, tgString("rod num", 0));
+    s.addPair( 2,  3, tgString("rod num", 1));
+    s.addPair( 4,  5, tgString("rod num", 2));
+    s.addPair( 6,  7, tgString("rod num", 3));
+    s.addPair( 8,  9, tgString("rod num", 4));
+    s.addPair( 10,  11, tgString("rod num", 5));
 
 }
 
-void sixBarsModel::addMuscles(tgStructure& s)
+void sixBarsModel::addActuators(tgStructure& s)
 {
     //Each node is connected with 4 Strings/Cables/Muscles
     //Which means it should be repeated only four times
@@ -134,23 +117,27 @@ void sixBarsModel::addMuscles(tgStructure& s)
                         {-1,-1,-1,-1},{-1,-1,-1,-1},   //8,9
                         {-1,-1,-1,-1},{-1,-1,-1,-1}    //10,11
     };
+    int counter = 0;
     for(int i = 0; i < 12; i++){
         for(int j = 0; j < 4; j++){
             if(pairs[i][j] == -1)
                 continue;
+            s.addPair(i,pairs[i][j], tgString("actuator num", counter));
+            counter++;
             printf("%d - %d\n",i,pairs[i][j]);
-            s.addPair(i,pairs[i][j], "muscle");
         }
     }
 }
+
 
 void sixBarsModel::setup(tgWorld& world)
 {
     // Define the configurations of the rods and strings
     // Note that pretension is defined for this string
     const tgRod::Config rodConfig(c.radius, c.density);
-    const tgSpringCableActuator::Config muscleConfig(c.stiffness, c.damping, c.pretension);
-    
+    // const tgSpringCableActuator::Config muscleConfig(c.stiffness, c.damping, c.pretension);
+    const tgBasicActuator::Config actuatorConfig(c.stiffness, c.damping, c.pretension,
+        c.hist, c.maxTension, c.targetVelocity);
     // Create a structure that will hold the details of this model
     tgStructure s;
     
@@ -161,7 +148,7 @@ void sixBarsModel::setup(tgWorld& world)
     addRods(s);
     
     // Add muscles to the structure
-    addMuscles(s);
+    addActuators(s);
     
     // Move the structure so it doesn't start in the ground
     s.move(btVector3(0, 10, 0));
@@ -169,17 +156,29 @@ void sixBarsModel::setup(tgWorld& world)
     // Create the build spec that uses tags to turn the structure into a real model
     tgBuildSpec spec;
     spec.addBuilder("rod", new tgRodInfo(rodConfig));
-    spec.addBuilder("muscle", new tgBasicActuatorInfo(muscleConfig));
-    
+    // spec.addBuilder("muscle", new tgBasicActuatorInfo(muscleConfig));
+    spec.addBuilder("actuator", new tgBasicActuatorInfo(actuatorConfig));
+
     // Create your structureInfo
     tgStructureInfo structureInfo(s, spec);
 
     // Use the structureInfo to build ourselves
     structureInfo.buildInto(*this, world);
 
+    // Get the rod rigid bodies for controller
+    std::vector<tgRod*> rods = sixBarsModel::find<tgRod>("rod");
+    for (int i = 0; i < rods.size(); i++) {
+        allRods.push_back(sixBarsModel::find<tgRod>(tgString("rod num", i))[0]);    
+    }
+        
+    // Get the actuators for controller
+    std::vector<tgBasicActuator*> actuators = sixBarsModel::find<tgBasicActuator>("actuator");
+    for (int i = 0; i < rods.size(); i++) {
+        allActuators.push_back(sixBarsModel::find<tgBasicActuator>(tgString("actuator num", i))[0]);    
+    }
     // We could now use tgCast::filter or similar to pull out the
     // models (e.g. muscles) that we want to control. 
-    allActuators = tgCast::filter<tgModel, tgSpringCableActuator> (getDescendants());
+    // allActuators = tgCast::filter<tgModel, tgSpringCableActuator> (getDescendants());
     
     // Notify controllers that setup has finished.
     notifySetup();
@@ -209,11 +208,16 @@ void sixBarsModel::onVisit(tgModelVisitor& r)
     tgModel::onVisit(r);
 }
 
-const std::vector<tgSpringCableActuator*>& sixBarsModel::getAllActuators() const
+std::vector<tgBasicActuator*>& sixBarsModel::getAllActuators()
 {
     return allActuators;
 }
-    
+
+std::vector<tgRod*>& sixBarsModel::getAllRods()
+{
+    return allRods;
+}
+
 void sixBarsModel::teardown()
 {
     notifyTeardown();

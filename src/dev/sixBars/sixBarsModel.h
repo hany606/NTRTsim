@@ -12,6 +12,14 @@
 // This library
 #include "core/tgModel.h"
 #include "core/tgSubject.h"
+#include "core/tgBasicActuator.h"
+#include "core/tgRod.h"
+#include "tgcreator/tgNode.h"
+#include "tgcreator/tgBuildSpec.h"
+#include "tgcreator/tgBasicActuatorInfo.h"
+#include "tgcreator/tgRodInfo.h"
+#include "tgcreator/tgStructure.h"
+#include "tgcreator/tgStructureInfo.h"
 // The C++ Standard Library
 #include <vector>
 
@@ -74,11 +82,17 @@ public:
      */
     virtual void onVisit(tgModelVisitor& r);
     
-    /**
-     * Return a vector of all muscles for the controllers to work with.
-     * @return A vector of all of the muscles
+     /**
+     * Return a vector of all actuators for the controllers to work with.
+     * @return A vector of all of the actuatorsy
      */
-    const std::vector<tgSpringCableActuator*>& getAllActuators() const;
+    std::vector<tgBasicActuator*>& getAllActuators();
+
+    /**
+     * Return a vector of all rod bodies for the controllers to work with.
+     * @return A vector of all of the rod rigid bodies
+     */
+    std::vector<tgRod*>& getAllRods();
       
 private:
     
@@ -106,13 +120,25 @@ private:
      * @param[in] s A tgStructure that we're building into
      */
     static void addMuscles(tgStructure& s);
+    
+    /**
+     * A function called during setup that creates actuators (Strings) from
+     * the relevant nodes. Rewrite this function for your own models.
+     * @param[in] s A tgStructure that we're building into
+     */
+    static void addActuators(tgStructure& s);
 
 private:    
     /**
      * A list of all of the spring cable actuators. Will be empty until most of the way
      * through setup when it is filled using tgModel's find methods
      */
-    std::vector<tgSpringCableActuator*> allActuators;
+    std::vector<tgBasicActuator*> allActuators;
+    /**
+     * A list of all of the rods. Will be empty until most of the way
+     * through setup when it is filled using tgModel's find methods
+     */
+    std::vector<tgRod*> allRods;
 };
 
 #endif  // sixBars_MODEL_H
