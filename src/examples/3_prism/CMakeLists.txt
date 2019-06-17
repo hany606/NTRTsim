@@ -3,7 +3,7 @@ link_directories(${LIB_DIR})
 link_libraries(tgcreator
                 util
                 sensors
-                core    
+                core
                 terrain 
                 tgOpenGLSupport)
 

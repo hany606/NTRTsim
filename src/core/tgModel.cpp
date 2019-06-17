@@ -149,14 +149,14 @@ void tgModel::addChild(tgModel* pChild)
      m_children.end());
 }
 
-std::string tgModel::toString(std::string prefix) const
+std::string tgModel::toString2(std::string prefix) const
 {
   std::string p = "  ";  
   std::ostringstream os;
   os << prefix << "tgModel(" << std::endl;
   os << prefix << p << "Children:" << std::endl;
   for(std::size_t i = 0; i < m_children.size(); i++) {
-    os << m_children[i]->toString(prefix + p) << std::endl;
+    os << m_children[i]->toString2(prefix + p) << std::endl;
   }
   os << prefix << p << "Tags: [" << getTags() << "]" << std::endl;
   os << prefix << ")";
@@ -218,6 +218,6 @@ bool tgModel::invariant() const
 std::ostream&
 operator<<(std::ostream& os, const tgModel& obj)
 {
-    os << obj.toString() << std::endl;
+    os << obj.toString2() << std::endl;
     return os;
 }

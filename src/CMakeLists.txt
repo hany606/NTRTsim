@@ -14,7 +14,7 @@ subdirs(
     controllers
     dev
     examples
-    yamlbuilder
+    #yamlbuilder
 )
 
 # To turn off verbose compiling, comment out

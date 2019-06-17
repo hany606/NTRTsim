@@ -115,7 +115,7 @@ public:
 	 * @return the original string with this model and its children's
 	 * tags appended
 	 */
-    virtual std::string toString(std::string prefix = "") const;
+    virtual std::string toString2(std::string prefix = "") const;
 	
 	/**
 	 * Get a vector of descendants sorted by type and a tagsearch.
