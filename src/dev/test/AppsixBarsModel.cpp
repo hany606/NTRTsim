@@ -20,6 +20,7 @@
 // The C++ Standard Library
 #include <iostream>
 
+
 /**
  * The entry point.
  * @param[in] argc the number of command-line arguments

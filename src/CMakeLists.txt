@@ -6,7 +6,7 @@ PROJECT(NASA_Tensegrity_Robotics_Toolkit)
 subdirs(
     core
     helpers
-    learning
+    # learning
     util
     sensors
     tgcreator
@@ -34,5 +34,3 @@ SET(ENV_LIB_DIR ${ENV_DIR}/lib)
 # Bring in the bullet graphics dependencies, etc. 
 
 include(inc.CMakeBullet.txt)
-
-

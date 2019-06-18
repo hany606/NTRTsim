@@ -16,11 +16,19 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
+// ROS libraries
+
+// #include "ros/ros.h"
+// #include "jsoncpp/json/json.h"
+
+
+
+// using namespace std;
 
 LengthController::LengthController(const double length) :
   m_length(length)
-{
+{ 
+  LengthController::rosBridge = new ROS_Bridge();
   if (length < 0.0)
     {
       throw std::invalid_argument("Negative length");
@@ -35,12 +43,7 @@ void LengthController::onSetup(sixBarsModel& subject)
 {
 
   m_controllers.clear(); //clear vector of controllers
-  rand_lengths.clear(); //vector of randomized restlengths
   start_lengths.clear(); //vector of randomized restlengths
-  
-  //set seeds
-  srand(time(NULL));
-  srand48(time(NULL));
   
   //get all of the tensegrity structure's cables
   actuators = subject.getAllActuators();
@@ -56,16 +59,9 @@ void LengthController::onSetup(sixBarsModel& subject)
       m_controllers.push_back(m_lenController);
       //generate random end restlength
       double start_length = actuators[i]->getStartLength();
-      printf("Start Lenght: %lf", start_length);
+      printf("Start Lenght %d: %lf\n", (int) i,  start_length);
       start_lengths.push_back(start_length);
-      //Randomization new lenghts process
-      double rand_max = start_length*0.25; //maximum pos. deviation from start length
-      double rand_min = -start_length*0.35; //maximum neg. deviation from start length
-      double gen_len = drand48()*(rand_max-rand_min) + rand_min + start_length;
-      
-      printf("randLength : %d - %lf\n", i, gen_len);
-
-      rand_lengths.push_back(gen_len);  //This have the lengths of the strings in its compact way.
+      rosBridge->setController(i,start_length);
     }
 }
 
@@ -80,8 +76,19 @@ void LengthController::onStep(sixBarsModel& subject, double dt)
     globalTime += dt;
     if(globalTime > 2){ //delay start of cable actuation
       if(toggle==0){    //print once when motors start moving
-        cout << endl << "Activating Cable Motors (Randomized Lengths) -------------------------------------" << endl;
+        std::cout << std::endl << "Activating Cable Motors (Randomized Lengths) -------------------------------------" << std::endl;
 	      toggle = 1;   //is used like a state flag
+        // Json::FastWriter fastWriter;
+        // Json::Value obj;
+        // obj["ACtion"] = "12";
+        // std::cout << fastWriter.write(obj) << "\n";
+        // wr.write(obj,);
+        // ros::init(argc,argv,"Name");
+        // ros::NodeHandle node_obj;
+        // // ros::Publisher number_publisher = node_obj.advertise<std_msgs::Int32>("/numbers",10);
+        // ros::Publisher number_publisher = node_obj.advertise<std_msgs::String>("chatter", 1000);
+        // ros::Rate loop_rate(10);
+        int number_count = 0;
       }
       if(toggle==1){
         toggle = 2;
@@ -103,9 +110,21 @@ void LengthController::onStep(sixBarsModel& subject, double dt)
         */
       }
       if(toggle==2){
-        toggle = 1;
-        m_controllers[0]->control(dt,10);
-        actuators[0]->moveMotors(dt);
+        // char** argv = 0;
+        // int argc = 0;
+        // if (ros::ok())
+        // {
+            // std_msgs::Int32 msg;
+            // std_msgs::String msg;
+            // msg.data = "HEYYYY";
+            // ROS_INFO("%s",msg.data.c_str());
+            // number_publisher.publish(msg);
+            // ros::spinOnce();
+            // loop_rate.sleep();
+        // }
+        // toggle = 1;
+        // m_controllers[0]->control(dt,10);
+        // actuators[0]->moveMotors(dt);
 
         //This to confirm that it had been changed
         if(actuators[0]->getRestLength()!=10)

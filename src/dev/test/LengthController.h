@@ -17,6 +17,11 @@
 // The C++ Standard Library
 #include <vector>
 
+#include "test.h"
+
+
+
+
 // Forward declarations
 class sixBarsModel;
 
@@ -48,7 +53,6 @@ public:
     virtual void onStep(sixBarsModel& subject, double dt);
 
     std::vector<tgBasicController*> m_controllers; //instantiate vector of controllers
-    std::vector<double> rand_lengths; //instantiate vector of random restlengths
     std::vector<double> start_lengths; //instantiate vector of random restlengths
     std::vector<tgBasicActuator*> actuators;
     
@@ -57,7 +61,9 @@ private:
     const double m_length;
     double globalTime = 0;
     int toggle;
+    ROS_Bridge* rosBridge;
 
 };
 
-#endif LENGTH_CONTROLLER_H
+#endif 
+// LENGTH_CONTROLLER_H
