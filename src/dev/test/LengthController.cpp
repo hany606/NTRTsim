@@ -63,6 +63,7 @@ void LengthController::onSetup(sixBarsModel& subject)
       start_lengths.push_back(start_length);
       rosBridge->setController(i,start_length);
     }
+
 }
 
 //This function is being activated each step
@@ -78,66 +79,34 @@ void LengthController::onStep(sixBarsModel& subject, double dt)
       if(toggle==0){    //print once when motors start moving
         std::cout << std::endl << "Activating Cable Motors (Randomized Lengths) -------------------------------------" << std::endl;
 	      toggle = 1;   //is used like a state flag
-        // Json::FastWriter fastWriter;
-        // Json::Value obj;
-        // obj["ACtion"] = "12";
-        // std::cout << fastWriter.write(obj) << "\n";
-        // wr.write(obj,);
-        // ros::init(argc,argv,"Name");
-        // ros::NodeHandle node_obj;
-        // // ros::Publisher number_publisher = node_obj.advertise<std_msgs::Int32>("/numbers",10);
-        // ros::Publisher number_publisher = node_obj.advertise<std_msgs::String>("chatter", 1000);
-        // ros::Rate loop_rate(10);
-        int number_count = 0;
       }
       if(toggle==1){
+        // subject.getCentroid();
         toggle = 2;
-        m_controllers[0]->control(dt,12);
+        m_controllers[0]->control(dt,9);
         actuators[0]->moveMotors(dt);
+        rosBridge->setController(0,9);
 
+        // std::cout<<"Shrink\n";
         //This to confirm that it had been changed
-        if(actuators[0]->getRestLength()!=12)
+        if(actuators[0]->getRestLength()!=9)
           toggle = 1;
-        /*
-        for(int i = 0; i<actuators.size(); i++){
-          m_controllers[i]->control(dt,rand_lengths[i]);
-          actuators[i]->moveMotors(dt);
-
-          //This to confirm that it had been changed
-          if(actuators[i]->getRestLength()!=rand_lengths[i])
-            toggle = 1;
-        }	
-        */
       }
       if(toggle==2){
-        // char** argv = 0;
-        // int argc = 0;
-        // if (ros::ok())
-        // {
-            // std_msgs::Int32 msg;
-            // std_msgs::String msg;
-            // msg.data = "HEYYYY";
-            // ROS_INFO("%s",msg.data.c_str());
-            // number_publisher.publish(msg);
-            // ros::spinOnce();
-            // loop_rate.sleep();
-        // }
-        // toggle = 1;
-        // m_controllers[0]->control(dt,10);
-        // actuators[0]->moveMotors(dt);
-
+        toggle = 1;
+        // subject.getCentroid();
+        // std::cout<<subject.getTgStrucutre().getCentroid()<<"\n";
+        // std::cout<<subject.getTgStrucutre().getNodes()[0].getX()<<"\n";
+        std::cout<<subject.getAllRods()[0]->centerOfMass()<<"\n";
+        // subject.getTgStrucutre();
+        // subject.m_
+        m_controllers[0]->control(dt,14);
+        actuators[0]->moveMotors(dt);
+        rosBridge->setController(0,14);
+        // std::cout<<"Increase\n";
         //This to confirm that it had been changed
-        if(actuators[0]->getRestLength()!=10)
+        if(actuators[0]->getRestLength()!= 14)
           toggle = 2;
-        /*
-        for(int i = 0; i<actuators.size(); i++){
-          m_controllers[i]->control(dt,start_lengths[i]);
-          actuators[i]->moveMotors(dt);
-          //This to confirm that it had been changed
-          if(actuators[i]->getRestLength()!=start_lengths[i])
-            toggle = 2;
-        }
-        */
       }
     }
   }

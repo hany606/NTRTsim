@@ -81,7 +81,9 @@ public:
      * to itself 
      */
     virtual void onVisit(tgModelVisitor& r);
-    
+    void getCentroid();
+    tgStructure getTgStrucutre();
+
      /**
      * Return a vector of all actuators for the controllers to work with.
      * @return A vector of all of the actuatorsy
@@ -93,6 +95,7 @@ public:
      * @return A vector of all of the rod rigid bodies
      */
     std::vector<tgRod*>& getAllRods();
+
       
 private:
     
@@ -133,6 +136,7 @@ private:
      * A list of all of the spring cable actuators. Will be empty until most of the way
      * through setup when it is filled using tgModel's find methods
      */
+    tgStructure s;
     std::vector<tgBasicActuator*> allActuators;
     /**
      * A list of all of the rods. Will be empty until most of the way

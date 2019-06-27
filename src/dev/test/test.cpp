@@ -2,7 +2,7 @@
 #include "test.h"
 #include <iostream>
 
-#include <nlohmann/json.hpp>
+#include "nlohmann/json.hpp"
 #include <fstream>
 
 using jsonf = nlohmann::json;

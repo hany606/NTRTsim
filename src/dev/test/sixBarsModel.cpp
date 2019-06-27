@@ -136,22 +136,21 @@ void sixBarsModel::setup(tgWorld& world)
     // Note that pretension is defined for this string
     const tgRod::Config rodConfig(c.radius, c.density);
     // const tgSpringCableActuator::Config muscleConfig(c.stiffness, c.damping, c.pretension);
-    const tgBasicActuator::Config actuatorConfig(c.stiffness, c.damping, c.pretension,
-        c.hist, c.maxTension, c.targetVelocity);
+    const tgBasicActuator::Config actuatorConfig(c.stiffness, c.damping, c.pretension, c.hist, c.maxTension, c.targetVelocity);
     // Create a structure that will hold the details of this model
-    tgStructure s;
+    // tgStructure s;
     
     // Add nodes to the structure
-    addNodes(s,c.length);
+    addNodes(sixBarsModel::s,c.length);
     
     // Add rods to the structure
-    addRods(s);
+    addRods(sixBarsModel::s);
     
     // Add muscles to the structure
-    addActuators(s);
+    addActuators(sixBarsModel::s);
     
     // Move the structure so it doesn't start in the ground
-    s.move(btVector3(0, 10, 0));
+    sixBarsModel::s.move(btVector3(10, 10, 0));
     
     // Create the build spec that uses tags to turn the structure into a real model
     tgBuildSpec spec;
@@ -160,19 +159,23 @@ void sixBarsModel::setup(tgWorld& world)
     spec.addBuilder("actuator", new tgBasicActuatorInfo(actuatorConfig));
 
     // Create your structureInfo
-    tgStructureInfo structureInfo(s, spec);
+    tgStructureInfo structureInfo(sixBarsModel::s, spec);
 
     // Use the structureInfo to build ourselves
     structureInfo.buildInto(*this, world);
+    // sixBarsModel::s.getNodes()[0].
 
     // Get the rod rigid bodies for controller
     std::vector<tgRod*> rods = sixBarsModel::find<tgRod>("rod");
-    // for (int i = 0; i < rods.size(); i++) {
-    //     allRods.push_back(sixBarsModel::find<tgRod>(tgString("rod num", i))[0]);    
-    // }
+    for (int i = 0; i < rods.size(); i++) {
+        allRods.push_back(sixBarsModel::find<tgRod>(tgString("rod num", i))[0]);    
+    }
     allRods = tgCast::filter<tgModel, tgRod> (getDescendants());
     
-        
+    // std::cout<<sixBarsModel::s.getCentroid()<<"\n";
+    // sixBarsModel::s.move(btVector3(0, 10, 0));
+    // sixBarsModel::getCentroid();
+
     // Get the actuators for controller
     std::vector<tgBasicActuator*> actuators = sixBarsModel::find<tgBasicActuator>("actuator");
     for (int i = 0; i < rods.size(); i++) {
@@ -225,3 +228,13 @@ void sixBarsModel::teardown()
     notifyTeardown();
     tgModel::teardown();
 }
+
+void sixBarsModel::getCentroid(){
+    std::cout<<sixBarsModel::s.getCentroid()<<"\n";
+}
+
+tgStructure sixBarsModel::getTgStrucutre(){
+    return sixBarsModel::s;
+}
+
+

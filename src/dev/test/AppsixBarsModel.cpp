@@ -60,12 +60,11 @@ int main(int argc, char** argv)
     // Attach controller to the model
     myModel->attach(myController);
 
-    
     // Add the model to the world * $Id$
     simulation.addModel(myModel);
-    
-    simulation.run();
 
+
+    simulation.run();
     //Teardown is handled by delete, so that should be automatic
     return 0;
 }

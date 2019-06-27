@@ -1,8 +1,0 @@
-prefix=/home/hany/repos/Tensegrity-Robot-IU-Internship19/src/dev/rosTest/catkin_ws/devel
-
-Name: tensegrity_ros
-Description: Description of tensegrity_ros
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/hany/repos/Tensegrity-Robot-IU-Internship19/src/dev/rosTest/catkin_ws/devel/lib 
-Requires: 
