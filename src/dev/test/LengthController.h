@@ -17,7 +17,9 @@
 // The C++ Standard Library
 #include <vector>
 
-#include "test.h"
+#include "ROS_Bridge.h"
+#include "TCP.h"
+#include "JSON_Structure.h"
 
 
 
@@ -62,6 +64,7 @@ private:
     double globalTime = 0;
     int toggle;
     ROS_Bridge* rosBridge;
+    TCP* tcp_com;
 
 };
 

@@ -1,5 +1,5 @@
-#ifndef test_G
-#define test_G
+#ifndef ROS_Brdige_G
+#define ROS_Brdige_G
 #include "nlohmann/json.hpp"
 
 class ROS_Bridge

@@ -25,7 +25,9 @@ add_executable(AppsixBarsModel2
     sixBarsModel.cpp
     AppsixBarsModel.cpp
     LengthController.cpp
-    test.cpp
+    ROS_Bridge.cpp
+    TCP.cpp
+    JSON_Structure.cpp
 )
 # target_link_libraries(AppsixBarsModel2 roscpp rostime rosconsole)
 # target_link_libraries(AppsixBarsModel2 jsoncpp)

@@ -12,6 +12,7 @@ application_full_path = main_path+application_name+"/data.json"
 with open(application_full_path,"r") as read_file:
     default_json = json.load(read_file)
 
+print("DONE")
 def reloadJson():
     with open(application_full_path, "r") as read_file:
         try:
@@ -20,7 +21,7 @@ def reloadJson():
             global default_json
             default_json = json_data
         except:
-            # print("Error in loading")
+            print("Error in loading")
             json_data = default_json
         finally:
             # for i in range(0,6):
