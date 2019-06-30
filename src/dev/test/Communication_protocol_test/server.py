@@ -1,3 +1,9 @@
+#TODO (DONE): Adapt this on python3 to solve the issues in json parser in python3
+#there is difference in json.loads as it only accept string not bytes  and in 3 TCP read return bytes
+#and str not converting from bytes to str in py3 but .decode('UTF-8') does
+#and the same for sendall function of TCP it only takes bytes so we need to encode the string first to bytes like object
+#and solving some errors like https://bugs.python.org/issue24283
+
 #Reference: https://pymotw.com/2/socket/tcp.html
 
 #Coding Style: camelCase
@@ -19,10 +25,12 @@ import os
 
 #Settings for the TCP communication
 packetSize = 500
-portNum = 10010
+portNum = 10023
 hostName = 'localhost'
+# connection = None
+# clientAddress = None
 
-globalFlag = False
+globalFlag = 0  #this is used to reset the NTRT environment and TCP connection with it
 
 # JSON object structure
 jsonObj = {
@@ -35,73 +43,77 @@ jsonObj = {
 #--------------------------------------------Functions--------------------------------------------
 # Ctrl+C Handle to close safely the TCP connection
 def signalHandler(signal, frame):
-    print('You pressed Ctrl+C!')
-    globalFlag = True
-    connection.close()
-    sys.exit(0)
-
-    # tmp = str(raw_input("You want reset or close: r/c: \n"))
-    # print(tmp)
-    # sleep(4)
-    # if(tmp == 'r'):
-    #     # TODO: Break the connection, then reset the connection
-    #     print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
-    #     # print('#########\nwaiting for a connection\n#########')
-    #     # connection, clientAddress = sock.accept()  #wait until it get a client
-    #     # print('connection from', clientAddress)
-    #     # main()
-    # elif(tmp == 'c'):
-    #     print("----------------------------------Exit-----------------------------------")
-    #     sys.exit(0)
-    # else:
-    #     print("Please write 'r' or 'c'")
+    # print('You pressed Ctrl+C!')
+    tmp = str(input("You want reset or close: r/c: \n"))
+    if(tmp == 'r'):
+        reset()
+    elif(tmp == 'c'):
+        # print("----------------------------------Exit-----------------------------------")
+        global globalFlag
+        globalFlag = 2
+    else:
+        # print("Please  Ctrl+C and write 'r' or 'c' ")
+        sleep(5)
 # function for writing data into TCP connection
-def write(conntection, data):
+def write(connection, data):
     print('sending data to the client:"{}"'.format(data))
-    connection.sendall(data)
+    try:
+        connection.sendall(data.encode())
+    except Exception as e:
+        print("$$$$$$$$$$$$ ERROR in Writing $$$$$$$$$$$$")
+        print("Error: " + str(e))
 
 # function for reading data from TCP connection
 def read(connection):
-    data = []
-    # Receive the data in small chunks and retransmit it
-    # while True:
-    data.append(connection.recv(packetSize))         #reading part
-    print('received "{}"'.format(data[-1]))
-        # if not(data[-1]):
-        #     print >>sys.stderr, 'no more data from', client_address
-        #     break
-    return "".join(data)
-
+    try:
+        data = []
+        # Receive the data in small chunks and retransmit it
+        # while True:
+        data.append(connection.recv(packetSize))         #reading part
+        print('received "{}"'.format(data[-1]))
+            # if not(data[-1]):
+            #     print >>sys.stderr, 'no more data from', client_address
+            #     break
+        return data[-1]
+    except:
+        print("$$$$$$$$$$$$ ERROR in Reading $$$$$$$$$$$$")
+        return None
+def reset():
+    global globalFlag
+    globalFlag = 1
 
 def main():
-    # global globalFlag
-    # globalFlag = False
     while True:
-        # Wait for a connection
-        try:
-            r = read(connection)    # Recieve incoming data
-        except:
-            print("$$$$$$$$$$$$ ERROR in Reading $$$$$$$$$$$$")
-            # break
-        jsonObjTmp = json.loads(r)  # Parse the data from string to json
-        # TODO: Use the incoming data after being converted to json
+        #Note: TODO: Make in the simulator wait a second then send a message
+        os.system('/home/hany/repos/Tensegrity-Robot-IU-Internship19/src/dev/test/Communication_protocol_test/helper.sh')
 
-        # TODO:
-        # Take the data from the simulator module
-        # Formulate the data as observation
-        # Generate Reward
-        # Feed the RL Algorithm with Reward and observartion
-        # Generate Action
-        # Decide either end of episode (Reset the simulator) or specific Action
-        # Modify the action in json
-        try:
+        print('#########\nwaiting for a connection\n#########')
+        connection, clientAddress = sock.accept()  #wait until it get a client
+        print('connection from', clientAddress)
+        global globalFlag
+        globalFlag = 0
+        while True:
+            r = read(connection)
+            if(r != None):
+                jsonObjTmp = json.loads(r.decode("utf-8"))  # Parse the data from string to json
+            # TODO: Use the incoming data after being converted to json
+
+            # TODO:
+            # Take the data from the simulator module
+            # Formulate the data as observation
+            # Generate Reward
+            # Feed the RL Algorithm with Reward and observartion
+            # Generate Action
+            # Decide either end of episode (Reset the simulator) or specific Action
+            # Modify the action in json
+
             write(connection,json.dumps(jsonObj))   # Write to the simulator module the json object with the required info
-        except:
-            print("$$$$$$$$$$$$ ERROR in Writing $$$$$$$$$$$$")
-            # break
-        # if(globalFlag):
-        #     print("GLOBAL")
-        #     break
+            if(globalFlag > 0):
+                print("GLOBAL FLAG Exit")
+                break
+        connection.close()
+        if(globalFlag == 2):
+            sys.exit(0)
 #-------------------------------------------------------------------------------------------------
 
 
@@ -119,10 +131,5 @@ signal.signal(signal.SIGINT, signalHandler) # Activate the listen to the Ctrl+C
 
 # This is top open the simulator
 print("Opening the NTRT simulator")
-#Note: TODO: Make in the simulator wait a second then send a message
-os.system('/home/hany/repos/Tensegrity-Robot-IU-Internship19/src/dev/test/Communication_protocol_test/helper.sh')
 
-print('#########\nwaiting for a connection\n#########')
-connection, clientAddress = sock.accept()  #wait until it get a client
-print('connection from', clientAddress)
 main()

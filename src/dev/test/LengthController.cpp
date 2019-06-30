@@ -17,7 +17,7 @@
 #include <string>
 
 #define HOST_NAME "localhost"
-#define PORT_NUM 10010
+#define PORT_NUM 10023
 
 // ROS libraries
 
