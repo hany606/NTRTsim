@@ -1,5 +1,6 @@
 ##################################################################################################
-# About: Server TCP code, get json object from the simulator and send another json object.
+# About: Server TCP code, get json object from the simulator and send another json object and
+#       process the data using stable baseline
 # Notes:
 #TODO (DONE): Adapt this on python3 to solve the issues in json parser in python3
 #there is difference in json.loads as it only accept string not bytes  and in 3 TCP read return bytes
@@ -10,6 +11,8 @@
 #Reference: https://pymotw.com/2/socket/tcp.html
 
 #Coding Style: camelCase
+# Run it with . ~/virtualenvs/baselines_env/bin/activate
+
 ##################################################################################################
 #import the libraries
 import socket
@@ -18,6 +21,8 @@ import signal
 import json
 from time import sleep
 import os
+
+import stable_baselines
 
 #import openai
 #import tensorflow as tf
