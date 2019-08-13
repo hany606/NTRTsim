@@ -30,3 +30,5 @@ src/.settings/org.eclipse.cdt.codan.core.prefs
 *.bbl
 *.blg
 *eps-converted-to.pdf
+
+!src/dev/test/json/
