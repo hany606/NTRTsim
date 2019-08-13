@@ -1,3 +1,5 @@
+!src/dev/test/json/*
+
 env
 build
 build_test
@@ -31,4 +33,3 @@ src/.settings/org.eclipse.cdt.codan.core.prefs
 *.blg
 *eps-converted-to.pdf
 
-!src/dev/test/json/*
