@@ -12,11 +12,11 @@ There is a google doc who contain a lot of data related to the project: [Link](h
 ## How to start?:
   1. Clone the repo:
 	  ```bash
-	  git clone git@github.com:hany606/Tensegrity-Robot-IU-Internship19.git
+	  git clone https://github.com/hany606/Tensegrity-Robot-IU-Internship19.git
 	  ```
   2. Go to the folder:
 	 ```bash
-	 cd Tensegrity-Robot-IU-Internship.git
+	 cd Tensegrity-Robot-IU-Internship
 	    ```
 	  
  3. Running the setup.sh
