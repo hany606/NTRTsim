@@ -1,4 +1,4 @@
-!src/dev/test/json/*
+!src/dev/test/json/
 
 env
 build
